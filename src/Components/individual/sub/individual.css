@@ -1,0 +1,102 @@
+
+.individual{
+    margin-top: 6rem;
+    width: 100%;
+    aspect-ratio: 1/0.5;
+    box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    z-index: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.indvdlPosterDiv{
+    width: 27%;
+    min-width: 10rem;
+    border-radius: 2rem;
+    height: 80%;
+    min-height: 10rem;
+    margin-left: 4vw;
+}
+.indvdlPoster{
+    border-radius: 2rem;
+    height: 102%;
+    z-index: 2;
+}
+.indvdlContents{
+    margin-left: 2%;
+}
+.indvdlContents h1{
+    display: inline;
+    font-size: clamp(1.5rem,3vw,3rem);
+}
+.indvdlDate{
+    font-size: clamp(1rem,3vw,2rem);
+}
+.indvdlTagline{
+    font-style: italic;
+    color: rgba(254, 254, 254, 0.6);
+    font-weight: 600;
+    margin-top: 0rem;
+}
+.indvdlGenre{
+    font-size: clamp(0.7rem,3vw,0.9rem);
+    margin-top: 0rem;
+    display: inline;
+    margin-right: 0.4rem;
+}
+.indvdlRunTime{
+    font-size: clamp(0.7rem,3vw,0.9rem);
+    margin-left: 1rem;
+}
+.indvdlOverview{
+    max-width: 40rem;
+    margin-top: 2rem;
+    font-size: clamp(0.9rem,3vw,1.2rem);
+}
+.overviewHeading{
+    display: block;
+    font-size: clamp(1rem,3vw,1.2rem);
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+.indvdlContents button{
+    margin-left: 4rem;
+    padding: 0.5rem 1rem;
+    font-size: clamp(0.8rem,3vw,1rem);
+    font-weight: 600;
+    border: none;
+    outline: none;
+    border-radius: 0.2rem;
+    margin-top: 4rem;
+}
+.listMessage{
+    color: white;
+    font-size: clamp(0.8rem,3vw,1rem);
+    margin-left: 1rem;
+}
+@media (max-width:920px) {
+    .indvdlOverview{
+        max-width: 30rem;
+    }
+}
+@media (max-width:700px) {
+    .indvdlPosterDiv{
+        display: none;
+    }
+    .individual{
+        box-shadow: inset 0 0 0 1000px rgba(0,0,0,0.4);
+    }
+    .indvdlOverview{
+        max-width: 100%;
+        margin-top: 0.4rem;
+    }
+    .indvdlContents button{
+        margin-top: 0.2rem;
+    }
+}
+@media (max-width:375px) {
+    .indvdlContents button{
+        margin-left: 0.5rem;
+    }
+}

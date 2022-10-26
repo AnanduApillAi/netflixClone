@@ -1,0 +1,32 @@
+.subDiv{
+    position: relative;
+    color: #333;
+    width: 100%;
+    top: 3.4rem;
+    text-align: center;
+    background-color: white;
+}
+.subDiv a{
+    color: rgb(222, 61, 58);
+    font-weight: 600;
+}
+.subDiv a:hover{
+    text-decoration: underline;
+}
+.contentHeading{
+    font-weight: 600;
+    line-height: 55%;
+    max-width: 100%;
+    font-size: clamp(21px,3vw,32px);
+}
+#usrnm{
+    margin-top: 1.2rem;
+    font-weight: 600;
+}
+#usrnmb{
+    margin-top: -1rem;
+}
+.subDiv a,p{
+    font-size: clamp(14px,3vw,17px);
+    margin-top: 3rem;
+}

@@ -1,0 +1,40 @@
+.video{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.videoUnavailable{
+    font-size: 2rem;
+    margin-top: 10rem;
+    margin-left: 35%;
+}
+
+.iframe{
+    width: 60%;
+    aspect-ratio: 1/0.5;
+}
+@media (max-width:750px) {
+    .iframe{
+        width: 95%;
+    }
+}
+iframe{
+    width: 100%;
+    height: 100%;
+}
+.skeltonCardIframe{
+    height: 100%;
+    width: 100%;
+    animation: skelton-loadingCardI 1s linear infinite alternate;
+    border-radius: inherit;
+}
+@keyframes skelton-loadingCardI{
+    0%{
+        background-color: hsl(0, 1%, 15%);
+    }
+    100%{
+        background-color: hsl(0, 2%, 52%);
+    }
+}

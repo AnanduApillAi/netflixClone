@@ -1,0 +1,110 @@
+.skelton{
+    animation: skelton-loading 1s linear infinite alternate;
+}
+@keyframes skelton-loading{
+    0%{
+        background-color: hsl(5, 82%, 30%);
+    }
+    100%{
+        background-color: hsl(0, 79%, 13%);
+    }
+}
+.homeBannerDiv{
+    margin-top: -1.3rem;
+    width: 100%;
+    aspect-ratio: 1/0.6;
+    overflow: hidden;
+    margin-bottom: 1.6rem;
+}
+.homeBanner{
+    width: 100%;
+    position: absolute;
+    aspect-ratio: 1/0.6;
+}
+
+.layerHomeBanner{
+    width: 100%;
+    aspect-ratio: 1/0.6;
+    background: rgba(0,0,0,0.2);
+    position: absolute;
+}
+.homeBannerContent{
+    color: white;
+    position: relative;
+    top: 34%;
+    z-index: 2;
+    margin-left: 2%;
+}
+.homeBannerContent h1{
+    font-size: clamp(1.4rem,3vw,2rem);
+    max-width: 60%;
+    margin-left: 1rem;
+    margin-bottom: 0.2rem;
+}
+.homeBannerContent p{
+    margin-top: 0;
+    max-width: 50%;
+    font-size: clamp(0.8rem,3vw,1rem);
+    margin-left: 1rem;
+}
+.homeBannerContent button{
+    margin-left: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    outline: none;
+    border-radius: 0.2rem;
+}
+.playTrailerHome{
+    background-color: white;
+    color: black;
+}
+.playTrailerHome:hover{
+    background-color: rgb(212, 209, 209);
+}
+.moreInfoHome{
+    background-color: rgba(144, 138, 138, 0.9);
+    color: white;
+    height: 2.2rem;
+}
+.moreInfoHome:hover{
+    background-color: rgb(101, 99, 99);
+}
+.resp-BtnsHome{
+    position: relative;
+    top: -6rem;
+    left: 87%;
+    display: none;
+}
+.resp-BtnsHome span{
+    display: block;
+    font-size: 1.6rem;
+    margin-top: 0.5rem;
+    color: rgb(255, 255, 255);
+}
+.resp-BtnsHome span:hover{
+    color: rgb(183, 177, 177);
+}
+@media (max-width:600px) {
+    .homeBannerDiv{
+        margin-top: 2rem;
+    }
+    .homeBannerContent{
+        top: 15%;
+    }
+    .homeBannerContent p{
+        max-width: 80%;
+    }
+    .homeBannerContent button{
+        display: none;
+    }
+    .resp-BtnsHome{
+        display: block;
+    }
+}
+@media (max-width:300px) {
+    .resp-BtnsHome{
+        top:-8rem
+    }
+}

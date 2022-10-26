@@ -1,0 +1,10 @@
+.signupHeader{
+    height: auto;
+}
+.logo2{
+    position: absolute;
+    top: 0.1rem;
+    left: 2%;
+    width: 17%;
+    min-width: 9rem;
+}

@@ -1,0 +1,26 @@
+.BannerDiv{
+    overflow: hidden;
+    height: 108vh;
+}
+.signupBanner{
+    width: 180%;
+    height: 184vh;
+}
+@media (max-width:925px) {
+    .signupBanner{
+        width: 250%;
+        height: 104vh;
+    }
+    .layer2{
+        height: 105vh;
+    }
+}
+.layer2{
+    height: 108vh;
+    background: rgba(0,0,0,.6);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}

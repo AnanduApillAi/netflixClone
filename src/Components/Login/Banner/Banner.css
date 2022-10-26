@@ -1,0 +1,48 @@
+.Herobanner{
+    margin-top: -2%;
+    background: rgba(0,0,0,.4);
+    overflow: hidden;
+}
+.HerobannerImage{
+    width: 100%;
+    height: 104vh;
+}
+@media (max-width:500px){
+    .HerobannerImage{
+        width: 50rem;
+        height: 100vh;
+    }
+}
+.layer {
+    height: 105vh;
+    background: rgba(0,0,0,.4);
+    background-image: linear-gradient(0deg,rgba(0,0,0,.8) 0,transparent 70%,rgba(0,0,0,.8));
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.bannerContent{
+    width: 100%;
+    position: absolute;
+    font-size: clamp(12px,3vw,23px);
+    top: 35%;
+    text-align: center;
+}
+.bannerContent h1{
+    padding:0 20%;
+}
+@media (max-width:745px) {
+    .bannerContent h1{
+        padding:0 10%;
+    }
+}
+@media (max-width:600px) {
+    .bannerContent{
+        top:43%
+    }
+    .bannerContent h1{
+        padding:0 3%;
+    }
+}

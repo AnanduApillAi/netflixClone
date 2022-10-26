@@ -1,0 +1,44 @@
+.loginForm{
+    position: absolute;
+    top: 59%;
+    width: 100%;
+    text-align: center;
+}
+.loginInput{
+  width: 30%;
+  min-width: 11rem;
+  color: black;
+  font-size: 1rem;
+  padding: 1.5% 15px;
+  outline: none;
+}
+.loginInput:focus{
+    border: 2px  rgb(43, 92, 142) solid;
+  }
+  .loginInput:focus::placeholder {
+    transform: translate(-3%, -110%);
+    transition: all 0.2s ease-out;
+    font-size: clamp(8px, 2.7vw, 13px);
+  }
+.loginBtn{
+    border: 1px solid #800b11;
+    font-size: clamp(19px, 2.7vw, 25px);
+    padding: 1% 2% 1.5%;
+    background-color: #e50914;
+    cursor: pointer;
+}
+@media (max-width:350px) {
+  .loginBtn{
+    display: block;
+    margin-top: 1.4rem;
+    width: 45%;
+    margin-left: 25%;
+  }
+}
+.loginBtn:hover{
+    background-color: #d3040f;
+}
+.errorMessage{
+  color: rgb(240, 47, 47);
+  font-size: clamp(13px, 2.7vw, 16px);
+}

@@ -1,0 +1,74 @@
+.commonDisplay{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    margin-top: 10rem;
+    padding: 0rem 1rem;
+    row-gap: 2rem;
+    margin-left: 1rem;
+}
+@media (max-width:1230px) {
+    .commonDisplay{
+        grid-template-columns: auto auto auto auto auto;
+    }
+}
+@media (max-width:1050px) {
+    .commonDisplay{
+        grid-template-columns: auto auto auto auto;
+    }
+}
+
+@media (max-width:870px){
+    .commonDisplay{
+        grid-template-columns: auto auto auto auto auto;
+    }
+    .moviesOnly{
+        width: 8rem;
+        height: 12rem;
+    }
+    .moviesOnly .backSide{
+        width: 7rem;
+        height:8rem;
+    }
+}
+@media (max-width:810px) {
+    .commonDisplay{
+        grid-template-columns: auto auto auto auto;
+    }
+}
+@media (max-width:658px) {
+    .commonDisplay{
+        grid-template-columns: auto auto auto;
+    }
+}
+@media (max-width:470px) {
+    .commonDisplay{
+        grid-template-columns: auto auto;
+    }
+}
+@media (max-width:338px) {
+    .moviesOnly{
+        width: 6rem;
+        height: 10rem;
+    }
+    .moviesOnly .backSide{
+        width: 5rem;
+        height:6rem;
+    }
+}
+.tvAndMovieHeading{
+    position: absolute;
+    top: 5.8rem;
+    left: 13rem;
+    font-size: clamp(1.1rem,3vw,1.5rem);
+}
+.backToTopBtn{
+    position: fixed;
+    bottom: 8rem;
+    right: 0.2rem;
+    font-size: 3.2rem;
+    z-index: 10;
+}
+.backToTopBtn:hover{
+    color: rgb(149, 7, 7);
+    font-size:3rem;
+}

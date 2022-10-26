@@ -1,0 +1,32 @@
+.description{
+    background-color: #14181c;  
+    width: 100%;
+    padding-bottom: 1rem;
+}
+.descriptionHeader{
+    background-color: #14181c;
+    padding-top: 1rem;
+    margin-top: 0.2rem;
+    width: 15rem;
+    border-bottom: 1px  solid rgb(106, 104, 104);
+    margin-left: 4rem;
+}
+@media (max-width:370px) {
+    .descriptionHeader{
+        margin-left: 1rem;
+    }
+}
+.descriptionHeader span{
+    font-size: 1.2rem;
+}
+.castDescription{
+    margin-left: 1rem;
+    cursor: pointer;
+}
+.descriptionBalance{
+    background-color:#14181c;
+}
+.descbtnActive{
+    color: red;
+    text-decoration: underline;
+}

@@ -1,0 +1,142 @@
+.skeltonCard{
+    height: inherit;
+    width: 100%;
+    animation: skelton-loadingCard 1s linear infinite alternate;
+    border-radius: inherit;
+}
+@keyframes skelton-loadingCard{
+    0%{
+        background-color: hsl(0, 1%, 15%);
+    }
+    100%{
+        background-color: hsl(0, 2%, 52%);
+    }
+}
+.backSide::-webkit-scrollbar{
+    display: none;
+}
+.moviesOnly{
+    border-radius: 0.4rem;
+    width: 11rem;
+    height: 15rem;
+    cursor: pointer;
+    transition: all cubic-bezier(0.075, 0.82, 0.165, 1);
+    margin-right: 1.5rem;
+}
+.moviesOnly img{
+    height: inherit;
+    width: inherit;
+    border-radius: inherit;
+}
+.moviesOnly .backSide{
+    height: 11.1rem;
+    width: 10rem;
+    border-radius: inherit;
+    font-size: clamp(0.7rem,3vw,0.9rem);
+    background-color: rgba(52, 49, 49);
+    padding:2rem 0.5rem;
+    overflow-y: scroll; 
+}
+.moviesOnly:hover{
+    transform: scale(1.03,1.03);
+}
+.orginalsCard{
+    margin-top: 5rem;
+    height: 20rem;
+    width: 13rem;
+    border-radius: 0.5rem;
+    margin-right: 2rem;
+    cursor: pointer;
+    transition: all cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.orginalsCard img{
+  height: inherit;
+  width: inherit;
+  border-radius:inherit;
+}
+.orginalsCard .backSide{
+    height: 16rem;
+    width: 12rem;
+    border-radius: inherit;
+    font-size: clamp(0.7rem,3vw,0.9rem);
+    background-color: rgba(52, 49, 49);
+    padding:2rem 0.5rem;
+    overflow: scroll;
+}
+.orginalsCard:hover{
+    transform: scale(1.03,1.03);
+}
+.HomeScrollsCard {
+    border-radius: 0.4rem;
+    width: 11rem;
+    height: 15rem;
+    cursor: pointer;
+    transition: all cubic-bezier(0.075, 0.82, 0.165, 1);
+    margin-right: 1.5rem;
+}
+.HomeScrollsCard img{
+    height: inherit;
+    width: inherit;
+    border-radius: inherit;
+}
+.HomeScrollsCard .backSide{
+    height: 11.1rem;
+    width: 10rem;
+    border-radius: inherit;
+    font-size: clamp(0.7rem,3vw,0.9rem);
+    background-color: rgba(52, 49, 49);
+    padding:2rem 0.5rem;
+    overflow-y: scroll; 
+}
+.HomeScrollsCard:hover{
+    transform: scale(1.03,1.03);
+}
+.cardBtn{
+    position: relative;
+    top: -11%;
+    left: 64%;
+    font-size: clamp(1.2rem,3vw,1.8rem);
+}
+.orginalsCard .cardBtn{
+    left: 80%;
+    top: -8%;
+}
+.HomeScrollsCard .cardBtn{
+    left: 80%;
+}
+.cardBtn:hover{
+    color: rgb(182, 180, 180);
+}
+.backSide{
+    text-align: start;
+}
+.deleteBtn{
+    position: relative;
+    top: -11%;
+    font-size: clamp(1.2rem,3vw,1.5rem);
+}
+.deleteBtn:hover{
+    color: rgb(182, 180, 180);
+}
+.cardOverview{
+    margin-top: 0.4rem;
+    font-size: clamp(0.7rem,3vw,0.9rem);
+}
+@media (max-width:600px) {
+    .orginalsCard{
+        width: 10rem;
+        height: 16rem;
+    }
+    .orginalsCard .backSide{
+        width: 9rem;
+        height: 12rem;
+    }
+    .HomeScrollsCard{
+        width: 8rem;
+        height: 12rem;
+    }
+    .HomeScrollsCard .backSide{
+        width: 7rem;
+        height:9rem;
+    }
+}

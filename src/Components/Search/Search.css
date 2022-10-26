@@ -1,0 +1,12 @@
+.urlSearch{
+    margin-top: 5rem;
+}
+.noResults{
+    margin-top: 14rem;
+    margin-left: 3rem;
+}
+@media (max-width:700px) {
+    .commonDisplaySearch{
+        margin-top: 1rem;
+    }
+}
