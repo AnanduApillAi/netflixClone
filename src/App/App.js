@@ -13,7 +13,6 @@ import IndividualPage from '../Pages/IndividualPage';
 import Video from '../Components/individual/Video/Video';
 
 function App() {
-
   return (
     <div>
       <BrowserRouter>

@@ -55,7 +55,7 @@
 .searchMain{
     display: flex;
     position: absolute;
-    right: 10%;
+    right: 5%;
     top: 1.8rem;
     height: 1.8rem;
 }

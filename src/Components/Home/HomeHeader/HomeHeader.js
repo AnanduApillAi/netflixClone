@@ -39,7 +39,7 @@ return (
       <li ><Link className={props.navBtnActive==='home'?`activeLink`:'links'} to="/home">Home</Link></li>
       <li ><Link  className={props.navBtnActive==='movie'?`activeLink`:'links'} to="/movies">Movies</Link></li>
       <li ><Link  className={props.navBtnActive==='tv'?`activeLink`:'links'} to="/tvshows">Tv Shows</Link></li>
-      <li ><Link  className={props.navBtnActive==='addlist'?`activeLink`:'links'} to="/mylist">My List</Link></li>  
+      <li style={{display:'none'}}><Link  className={props.navBtnActive==='addlist'?`activeLink`:'links'} to="/mylist">My List</Link></li>  
     </ul>
     </div>
     <div  id={state?'searchActive1':''} className='searchMain' >
@@ -49,7 +49,7 @@ return (
     <button  onClick={searchHandle}  className='searchBtnHome' onMouseOver={()=>setHovered(true)} onMouseOut={()=>{setHovered(false)}}>search</button>
     </div>
     </div>
-    <div className='logOutDiv' ><button onBlur={()=>{if(!logOutScreenHover)setLogOutScreen(false)}} onClick={()=>setLogOutScreen(!logOutScreen)}  className='logOut' >Log Out</button></div>
+    <div className='logOutDiv' style={{display:'none'}}><button onBlur={()=>{if(!logOutScreenHover)setLogOutScreen(false)}} onClick={()=>setLogOutScreen(!logOutScreen)}  className='logOut' >Log Out</button></div>
     <span className='hamBurger'  onClick={()=>setSideNav(!sideNav)}><i className="fa-solid fa-bars"></i></span>
     </div>
     {logOutScreen?<div onMouseOver={()=>setlogOutScreenHover(true)} onMouseOut={()=>{setlogOutScreenHover(false);document.querySelector('.logOut').focus()}} className='logOutScreen'>

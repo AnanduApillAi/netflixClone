@@ -161,7 +161,7 @@ else{
        </div>:''}
        <p className='indvdlOverview'><span className='overviewHeading'>Overview</span>{individual.overview}</p>
        <button onClick={handleTrailer} className='playTrailerHome'><i className="fa-solid fa-play"></i> Play Trailer</button>
-       {inList?<button onMouseLeave={handleMessage} onBlur={()=>setMessage(null)} onClick={()=>handleDelete(individual)} className='moreInfoHome'><i className="fa-solid fa-trash"></i>{!listBtnLoading?' Remove From List':' Loading....'}</button>:<button onMouseLeave={handleMessage} onBlur={()=>setMessage(null)} onClick={()=>handleAdd(individual)} className='moreInfoHome'><i className="fa-sharp fa-solid fa-plus"></i>{!listBtnLoading?' Add To List':' Loading...'}</button>}
+       {inList?<button  onMouseLeave={handleMessage} onBlur={()=>setMessage(null)} onClick={()=>handleDelete(individual)} className='moreInfoHome' style={{display:'none'}}><i className="fa-solid fa-trash"></i>{!listBtnLoading?' Remove From List':' Loading....'}</button>:<button onMouseLeave={handleMessage} onBlur={()=>setMessage(null)} onClick={()=>handleAdd(individual)} className='moreInfoHome' style={{display:'none'}}><i className="fa-sharp fa-solid fa-plus"></i>{!listBtnLoading?' Add To List':' Loading...'}</button>}
         {message?<span className='listMessage'>{message}</span>:''}
        </div>
         </div>

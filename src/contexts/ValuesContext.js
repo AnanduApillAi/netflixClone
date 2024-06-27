@@ -5,8 +5,8 @@ export const ValueContext=createContext(null)
 
 export default function ValuesContext({children}) {
 const [userName,setUserName]=useState()
-const [isAuthenticated,setAuthentication]=useState(false)
-const [userKey,setUserKey]=useState('')
+const [isAuthenticated,setAuthentication]=useState(true)
+const [userKey,setUserKey]=useState('12345')
 const [individual,setIndividual]=useState(null)
 const[query,setQuery]=useState(null)
 const [videos,setVideos]=useState(null)
