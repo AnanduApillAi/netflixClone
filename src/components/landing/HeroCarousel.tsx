@@ -155,7 +155,7 @@ export default function HeroCarousel() {
       <div className="flex justify-center items-center relative w-full" style={{ minHeight: `${2 * radius}px` }}>
         <motion.div
           key={animCycle}
-          className={`relative ${viewportWidth < 400 ? 'top-[10rem]' : 'top-[12rem] sm:top-[12rem] lg:top-[12rem]'}`}
+          className={`relative ${viewportWidth < 350 ? 'top-[10rem]': viewportWidth < 400 ? 'top-[14rem]' : 'top-[12rem] sm:top-[12rem] lg:top-[12rem]'}`}
           style={{ width: `${2 * radius}px`, height: `${2 * radius}px`, transformOrigin: `${radius}px ${radius}px` }}
           initial={{ rotate: (loading || items.length === 0) ? currentRotation : currentRotation - 180 }}
           animate={{ rotate: currentRotation }}
