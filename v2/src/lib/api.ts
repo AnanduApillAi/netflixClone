@@ -1,28 +1,42 @@
-const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-const BASE_URL = 'https://api.themoviedb.org/3';
+export type MediaType = "movie" | "tv" | "all";
 
-export const fetcher = (url: string) =>
-  fetch(`${BASE_URL}${url}?api_key=${API_KEY}`).then((res) => res.json());
+const TMDB_API_KEY = process.env.TMDB_API_KEY ?? "";
+const TMDB_BASE = "https://api.themoviedb.org/3";
 
-export const getTrending = () => fetcher('/trending/all/week');
+function withApiKey(url: string) {
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}api_key=${TMDB_API_KEY}`;
+  
+}
 
-export const getNetflixOriginals = () => fetcher('/discover/tv?with_networks=213');
+export const tmdb = {
+  trendingAllWeek: () => withApiKey(`${TMDB_BASE}/trending/all/week`),
+  topRatedMovies: (page = 1) => withApiKey(`${TMDB_BASE}/movie/top_rated?page=${page}`),
+  popularMovies: (page = 1) => withApiKey(`${TMDB_BASE}/movie/popular?page=${page}`),
+  topRatedTv: (page = 1) => withApiKey(`${TMDB_BASE}/tv/top_rated?page=${page}`),
+  nowPlayingMovies: (page = 1) => withApiKey(`${TMDB_BASE}/movie/now_playing?page=${page}`),
+  airingTodayTv: (page = 1) => withApiKey(`${TMDB_BASE}/tv/airing_today?page=${page}`),
+  discoverNetflixOriginals: (page = 1) =>
+    withApiKey(`${TMDB_BASE}/discover/tv?with_networks=213&page=${page}`),
+  discoverMovies: (params: string) => withApiKey(`${TMDB_BASE}/discover/movie?${params}`),
+  discoverTv: (params: string) => withApiKey(`${TMDB_BASE}/discover/tv?${params}`),
+  discoverMoviesWith: (params: Record<string, string | number>) =>
+    withApiKey(`${TMDB_BASE}/discover/movie?${new URLSearchParams(params as any).toString()}`),
+  discoverTvWith: (params: Record<string, string | number>) =>
+    withApiKey(`${TMDB_BASE}/discover/tv?${new URLSearchParams(params as any).toString()}`),
+  details: (type: Exclude<MediaType, "all">, id: string, append?: string) =>
+    withApiKey(`${TMDB_BASE}/${type}/${id}${append ? `?append_to_response=${append}` : ""}`),
+  credits: (type: Exclude<MediaType, "all">, id: string) =>
+    withApiKey(`${TMDB_BASE}/${type}/${id}/credits`),
+  searchMulti: (query: string, page = 1) =>
+    withApiKey(`${TMDB_BASE}/search/multi?query=${encodeURIComponent(query)}&page=${page}`),
+  genreList: (type: "movie" | "tv") => withApiKey(`${TMDB_BASE}/genre/${type}/list`),
+};
 
-export const getTopRated = () => fetcher('/movie/top_rated');
+export const IMAGE_BASE = "https://image.tmdb.org/t/p";
+export const poster = (path?: string | null, size: "w185" | "w300" | "w500" = "w300") =>
+  path ? `${IMAGE_BASE}/${size}${path}` : undefined;
+export const backdrop = (path?: string | null, size: "w780" | "w1280" = "w1280") =>
+  path ? `${IMAGE_BASE}/${size}${path}` : undefined;
 
-export const getMoviesByGenre = (genreId: string) =>
-  fetcher(`/discover/movie?with_genres=${genreId}`);
 
-export const getTvShowsByGenre = (genreId: string) =>
-  fetcher(`/discover/tv?with_genres=${genreId}`);
-
-export const getMovieDetails = (id: string) => fetcher(`/movie/${id}`);
-
-export const getTvShowDetails = (id: string) => fetcher(`/tv/${id}`);
-
-export const getMovieCast = (id: string) => fetcher(`/movie/${id}/credits`);
-
-export const getTvShowCast = (id: string) => fetcher(`/tv/${id}/credits`);
-
-export const searchMovies = (query: string) =>
-  fetcher(`/search/movie?query=${query}`);
