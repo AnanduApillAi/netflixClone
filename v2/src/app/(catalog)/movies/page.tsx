@@ -42,7 +42,7 @@ export default async function MoviesPage({ searchParams }: { searchParams: Promi
           
           {/* Movie Grid */}
           <div className="pb-12">
-            <MovieGrid fetchUrl={tmdb.discoverMovies(params)} />
+            <MovieGrid fetchUrl={tmdb.discoverMovies(params)} type="movie" />
           </div>
         </div>
       </div>

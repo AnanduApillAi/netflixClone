@@ -1,6 +1,6 @@
 import MovieCard from "./MovieCard";
 
-export default async function MovieGrid({ fetchUrl }: { fetchUrl: string }) {
+export default async function MovieGrid({ fetchUrl, type }: { fetchUrl: string, type?: "movie" | "tv" }) {
   let items: any[] = [];
   try {
     const res = await fetch(fetchUrl, { next: { revalidate: 60 } });
@@ -16,7 +16,8 @@ export default async function MovieGrid({ fetchUrl }: { fetchUrl: string }) {
         <MovieCard
           key={`${item.media_type || item.title || item.name}-${item.id}`}
           item={item}
-          href={`/${item.media_type === "tv" ? "tv" : "movie"}/${item.id}`}
+          href={`/${type || item.media_type}/${item.id}`}
+          type={type || item.media_type}
         />
       ))}
       {items.length === 0 && (

@@ -43,7 +43,7 @@ export default async function TvShowsPage({ searchParams }: { searchParams: Prom
           
           {/* Shows Grid */}
           <div className="pb-12">
-            <MovieGrid fetchUrl={tmdb.discoverTv(params)} />
+            <MovieGrid fetchUrl={tmdb.discoverTv(params)} type="tv" />
           </div>
         </div>
       </div>

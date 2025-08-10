@@ -5,9 +5,10 @@ import { poster } from "@/lib/api";
 type Props = {
   item: any;
   href: string;
+  type: string;
 };
 
-export default function MovieCard({ item, href }: Props) {
+export default function MovieCard({ item, href, type }: Props) {
   const img = poster(item?.poster_path, "w300");
   const title = item?.title || item?.name || "";
   const overview = item?.overview || "No description available.";
@@ -94,7 +95,7 @@ export default function MovieCard({ item, href }: Props) {
               className="mt-4 self-start bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-full transition-colors duration-300 text-sm inline-flex items-center"
               href={href}
             >
-              View Movie
+              View {type === "tv" ? "TV Show" : "Movie"}
               <svg xmlns="http://www.w3.org/2000/svg" fill="#ffff" width="24" height="24" viewBox="0 0 24 24"><path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"/></svg>
             </Link>
           </div>

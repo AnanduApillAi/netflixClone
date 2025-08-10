@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import {Link} from "next-view-transitions";
 import { tmdb, poster, backdrop } from "@/lib/api";
 import HeroNav from "@/components/landing/HeroNav";
 
@@ -7,11 +7,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const res = await fetch(tmdb.details("tv", id), { next: { revalidate: 300 } }).catch(() => null as any);
   const data = res?.ok ? await res.json() : null;
+  console.log(data)
   const title = data?.name ? `${data.name} | Netflix Clone` : "TV Show | Netflix Clone";
   return { title };
 }
 
-export default async function TvDetails({ params }: { params: Promise<{ id: string }> }) {
+export default async function TvshowDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const res = await fetch(tmdb.details("tv", id, "videos,credits"), {
     next: { revalidate: 300 },
@@ -20,7 +21,7 @@ export default async function TvDetails({ params }: { params: Promise<{ id: stri
   
   if (!data) {
     return (
-      <main className="min-h-screen text-[#0B0F19]  bg-white">
+      <main className="min-h-screen bg-white">
         <div className="w-[min(1280px,100%-16px)] bg-white mx-auto">
           <div className="mx-auto max-w-[1200px] min-h-screen px-5 lg:px-8">
             <HeroNav />
@@ -39,228 +40,223 @@ export default async function TvDetails({ params }: { params: Promise<{ id: stri
   const bg = backdrop(data.backdrop_path);
   const posterUrl = poster(data.poster_path, "w500");
 
+  // TV show specific data parsing
+  const episodeRuntime = Array.isArray(data.episode_run_time) && data.episode_run_time.length > 0 ? data.episode_run_time[0] : undefined;
+  const hours = episodeRuntime ? Math.floor(episodeRuntime / 60) : undefined;
+  const minutes = episodeRuntime && typeof hours === "number" ? episodeRuntime % 60 : undefined;
+
   const trailer = data.videos?.results?.find((v: any) => v.type === "Trailer" && v.site === "YouTube");
   const mainCast = data.credits?.cast?.slice(0, 6) || [];
   const creators = data.created_by || [];
   const producers = data.credits?.crew?.filter((c: any) => c.job === "Producer").slice(0, 3) || [];
+  const firstAirYear = data.first_air_date ? new Date(data.first_air_date).getFullYear() : undefined;
+  const voteAverage = typeof data.vote_average === "number" ? Number(data.vote_average).toFixed(1) : undefined;
 
   return (
-    <main className="min-h-screen text-[#0B0F19]  bg-white">
-      {/* Outer framed canvas */}
-      <div className="w-[min(1280px,100%-16px)] bg-white mx-auto overflow-hidden">
-        <div className="mx-auto max-w-[1200px]">
-          <div className="px-5 lg:px-8">
-            <HeroNav />
-          </div>
-          
-          {/* Hero Section with Backdrop */}
-          <div className="relative">
-            {bg && (
-              <div className="relative h-[300px] sm:h-[400px] overflow-hidden rounded-[20px] mx-5 lg:mx-8 mt-6">
-                <Image src={bg} alt={data.name} fill className="object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+    <main className="min-h-screen bg-white">
+      <div className="">
+        <div className="mx-auto max-w-[1200px] px-5 lg:px-8 pt-4">
+          <HeroNav />
+        </div>
+
+        {/* Hero */}
+        <section className="relative mt-2 bg-gradient-to-b from-gray-900 via-gray-900 to-[#111827]">
+          {bg && (
+            <div className="absolute inset-0 opacity-40">
+              <Image src={bg} alt={data.name} fill className="object-cover" />
+            </div>
+          )}
+          <div className="relative z-10 max-w-[1200px] mx-auto px-5 lg:px-8 py-12 md:py-20 flex flex-col lg:flex-row gap-8 items-end lg:items-stretch">
+            {posterUrl && (
+              <div className="w-full lg:w-auto flex-shrink-0 flex justify-center sm:justify-start">
+                <div className="relative w-[260px] max-w-sm aspect-[2/3] rounded-xl overflow-hidden ">
+                  <Image src={posterUrl} alt={data.name} fill className="object-cover" />
+                </div>
               </div>
             )}
-          </div>
-
-          {/* Main Content */}
-          <div className="px-5 lg:px-8 pb-12">
-            <div className="flex flex-col lg:flex-row gap-8 -mt-20 relative z-10">
-              {/* Poster */}
-              {posterUrl && (
-                <div className="flex-shrink-0 lg:w-[280px]">
-                  <div className="relative w-[200px] lg:w-[280px] aspect-[2/3] rounded-[16px] overflow-hidden shadow-[0_8px_32px_rgba(16,24,40,0.15)] bg-[#F8F9FA] border border-[#E5E7EB]">
-                    <Image src={posterUrl} alt={data.name} fill className="object-cover" />
-                  </div>
-                </div>
-              )}
-
-              {/* Details */}
-              <div className="flex-1 space-y-6">
-                {/* Title & Basic Info */}
-                <div>
-                  <h1 className="text-[32px] lg:text-[40px] font-extrabold leading-tight mb-3">
-                    {data.name}
-                  </h1>
-                  
-                  {/* Meta Info */}
-                  <div className="flex flex-wrap items-center gap-4 text-[#6B7280] text-sm">
-                    {data.first_air_date && (
-                      <span className="flex items-center gap-1">
-                        <span className="w-1 h-1 bg-[#6B7280] rounded-full"></span>
-                        {new Date(data.first_air_date).getFullYear()}
-                      </span>
-                    )}
-                    {typeof data.number_of_seasons === "number" && (
-                      <span className="flex items-center gap-1">
-                        <span className="w-1 h-1 bg-[#6B7280] rounded-full"></span>
-                        {data.number_of_seasons} Season{data.number_of_seasons !== 1 ? 's' : ''}
-                      </span>
-                    )}
-                    {typeof data.number_of_episodes === "number" && (
-                      <span className="flex items-center gap-1">
-                        <span className="w-1 h-1 bg-[#6B7280] rounded-full"></span>
-                        {data.number_of_episodes} Episodes
-                      </span>
-                    )}
-                    {data.vote_average && (
-                      <span className="flex items-center gap-1">
-                        <span className="w-1 h-1 bg-[#6B7280] rounded-full"></span>
-                        ⭐ {Number(data.vote_average).toFixed(1)}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Genres */}
-                  {Array.isArray(data.genres) && data.genres.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {data.genres.map((g: any) => (
-                        <span key={g.id} className="px-3 py-1 rounded-full bg-[#F4F5F7] text-[#111827] text-xs font-medium">
-                          {g.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Overview */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-3">Overview</h3>
-                  <p className="text-[#6B7280] leading-relaxed">
-                    {data.overview || "No overview available."}
-                  </p>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-wrap gap-3">
-                  {trailer && (
-                    <Link
-                      href={`/watch/tv/${id}`}
-                      className="px-6 py-3 bg-[#6C5CE7] text-white font-medium rounded-full hover:bg-[#5B4BD6] transition-colors shadow-[0_4px_16px_rgba(108,92,231,0.24)]"
-                    >
-                      ▶ Play Trailer
-                    </Link>
-                  )}
-                  <button className="px-6 py-3 bg-[#F4F5F7] text-[#111827] font-medium rounded-full hover:bg-[#E5E7EB] transition-colors">
-                    + Add to List
-                  </button>
-                </div>
-
-                {/* Creators & Producers */}
-                {(creators.length > 0 || producers.length > 0) && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {creators.length > 0 && (
-                      <div>
-                        <h4 className="text-sm font-semibold text-[#111827] mb-2">Created by</h4>
-                        <p className="text-[#6B7280] text-sm">
-                          {creators.map((c: any) => c.name).join(", ")}
-                        </p>
-                      </div>
-                    )}
-                    {producers.length > 0 && (
-                      <div>
-                        <h4 className="text-sm font-semibold text-[#111827] mb-2">Producers</h4>
-                        <p className="text-[#6B7280] text-sm">
-                          {producers.map((p: any) => p.name).join(", ")}
-                        </p>
-                      </div>
-                    )}
-                  </div>
+            <div className="text-white flex flex-col justify-center md:justify-end w-full">
+              <p className="text-sm text-gray-300 tracking-wider">
+                {firstAirYear && <span>{firstAirYear}</span>}
+                {data.number_of_seasons && <span> • {data.number_of_seasons} Season{data.number_of_seasons > 1 ? 's' : ''}</span>}
+                {typeof hours === "number" && typeof minutes === "number" && (
+                  <span> • {hours}h {minutes}m</span>
                 )}
-              </div>
-            </div>
-
-            {/* Cast Section */}
-            {mainCast.length > 0 && (
-              <div className="mt-12">
-                <h2 className="text-[24px] font-bold mb-6">Cast</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-                  {mainCast.map((actor: any) => (
-                    <div key={actor.id} className="text-center">
-                      <div className="relative aspect-[3/4] rounded-[12px] overflow-hidden bg-[#F8F9FA] border border-[#E5E7EB] mb-3">
-                        {actor.profile_path ? (
-                          <Image
-                            src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
-                            alt={actor.name}
-                            fill
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-[#F3F4F6] to-[#E5E7EB] flex items-center justify-center">
-                            <div className="text-[#9CA3AF] text-xs">No Photo</div>
-                          </div>
-                        )}
-                      </div>
-                      <div>
-                        <div className="font-medium text-[#111827] text-sm line-clamp-2 mb-1">
-                          {actor.name}
-                        </div>
-                        <div className="text-[#6B7280] text-xs line-clamp-1">
-                          {actor.character}
-                        </div>
-                      </div>
-                    </div>
+                {voteAverage && (
+                  <span className="ml-1 inline-flex items-center gap-1 text-amber-300"><span aria-hidden>★</span> {voteAverage}</span>
+                )}
+              </p>
+              <h1 className="text-5xl md:text-7xl font-bold mt-2 drop-shadow-[0_8px_24px_rgba(0,0,0,0.8)]">{data.name}</h1>
+              {Array.isArray(data.genres) && data.genres.length > 0 && (
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {data.genres.map((g: any) => (
+                    <span key={g.id} className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium border border-white/20 backdrop-blur-sm">
+                      {g.name}
+                    </span>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Additional Details */}
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Show Details */}
-              <div className="bg-[#F8F9FA] rounded-[16px] p-6">
-                <h3 className="font-semibold text-[#111827] mb-4">Show Details</h3>
-                <div className="space-y-3 text-sm">
-                  {data.first_air_date && (
-                    <div className="flex justify-between">
-                      <span className="text-[#6B7280]">First Air Date</span>
-                      <span className="text-[#111827] font-medium">
-                        {new Date(data.first_air_date).toLocaleDateString()}
-                      </span>
-                    </div>
-                  )}
-                  {data.last_air_date && (
-                    <div className="flex justify-between">
-                      <span className="text-[#6B7280]">Last Air Date</span>
-                      <span className="text-[#111827] font-medium">
-                        {new Date(data.last_air_date).toLocaleDateString()}
-                      </span>
-                    </div>
-                  )}
-                  {data.status && (
-                    <div className="flex justify-between">
-                      <span className="text-[#6B7280]">Status</span>
-                      <span className="text-[#111827] font-medium">{data.status}</span>
-                    </div>
-                  )}
-                  {data.vote_count && (
-                    <div className="flex justify-between">
-                      <span className="text-[#6B7280]">Votes</span>
-                      <span className="text-[#111827] font-medium">
-                        {data.vote_count.toLocaleString()}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Production */}
-              {data.production_companies?.length > 0 && (
-                <div className="bg-[#F8F9FA] rounded-[16px] p-6">
-                  <h3 className="font-semibold text-[#111827] mb-4">Production</h3>
-                  <div className="space-y-2">
-                    {data.production_companies.slice(0, 4).map((company: any) => (
-                      <div key={company.id} className="text-sm text-[#6B7280]">
-                        {company.name}
-                      </div>
-                    ))}
-                  </div>
+              )}
+              {trailer && (
+                <div className="mt-8">
+                  <Link href={`/watch/tv/${id}`} className="inline-flex items-center justify-center bg-[#8B5CF6] hover:bg-[#8a5cf6c4]  text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200">
+                    <svg className="mr-2" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+                    Play Trailer
+                  </Link>
                 </div>
               )}
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Light content surface with rounded top */}
+        <section className="relative z-20 -mt-6">
+          <div className="">
+            <div className="bg-[#F9FAFB] text-[#1F2937] rounded-t-3xl p-6  sm:p-8 ">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-[1200px] mx-auto px-0 lg:px-8">
+                {/* Left: Overview + Cast + Seasons */}
+                <div className="lg:col-span-2">
+                  <section>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4 border-l-4 border-[#8B5CF6] pl-4">Overview</h2>
+                    <p className="text-gray-600 text-lg leading-relaxed">{data.overview || "No overview available."}</p>
+                  </section>
+                  
+                 
+                  
+                  <div className="border-b border-gray-200 my-8" />
+                  {mainCast.length > 0 && (
+                    <section>
+                      <h2 className="text-3xl font-bold text-gray-900 mb-6 border-l-4 border-[#8B5CF6] pl-4">Cast</h2>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                        {mainCast.map((actor: any) => (
+                          <div key={actor.id} className="text-center group">
+                            <div className="relative w-32 h-32 mx-auto">
+                              <div className="w-32 h-32">
+                                {actor.profile_path ? (
+                                  <Image src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`} alt={actor.name} fill className="object-cover rounded-2xl" />
+                                ) : (
+                                  <div className="w-full h-full bg-gray-200 rounded-2xl" />
+                                )}
+                              </div>
+                            </div>
+                            <h3 className="mt-4 text-gray-900 font-semibold">{actor.name}</h3>
+                            <p className="text-gray-500 text-sm">{actor.character}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+                </div>
+
+                {/* Right: Details + Networks + Production */}
+                <div className="lg:col-span-1 space-y-8">
+                  <section>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4 border-l-4 border-amber-400 pl-4">Details</h2>
+                    <div className="space-y-4 text-gray-800 bg-gray-100 p-6 rounded-lg">
+                      {creators.length > 0 && (
+                        <div>
+                          <div className="flex items-center">
+                            <svg className="text-gray-500 mr-4" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 4h16v2H4zm0 5h10v2H4zm0 5h16v2H4z"/></svg>
+                            <div>
+                              <p className="font-semibold text-gray-600">Creators</p>
+                              <p className="font-medium">{creators.map((c: any) => c.name).join(", ")}</p>
+                            </div>
+                          </div>
+                          <div className="border-t border-gray-200 my-2" />
+                        </div>
+                      )}
+                      {data.status && (
+                        <div>
+                          <div className="flex items-center">
+                            <svg className="text-gray-500 mr-4" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            <div>
+                              <p className="font-semibold text-gray-600">Status</p>
+                              <p className="font-medium">{data.status}</p>
+                            </div>
+                          </div>
+                          <div className="border-t border-gray-200 my-2" />
+                        </div>
+                      )}
+                      {data.first_air_date && (
+                        <div>
+                          <div className="flex items-center">
+                            <svg className="text-gray-500 mr-4" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2v2H5a2 2 0 0 0-2 2v1h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm14 7H3v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9z"/></svg>
+                            <div>
+                              <p className="font-semibold text-gray-600">First Air Date</p>
+                              <p className="font-medium">{new Date(data.first_air_date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}</p>
+                            </div>
+                          </div>
+                          <div className="border-t border-gray-200 my-2" />
+                        </div>
+                      )}
+                      {data.last_air_date && (
+                        <div>
+                          <div className="flex items-center">
+                            <svg className="text-gray-500 mr-4" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 2v2H5a2 2 0 0 0-2 2v1h18V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2H7zm14 7H3v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9z"/></svg>
+                            <div>
+                              <p className="font-semibold text-gray-600">Last Air Date</p>
+                              <p className="font-medium">{new Date(data.last_air_date).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}</p>
+                            </div>
+                          </div>
+                          <div className="border-t border-gray-200 my-2" />
+                        </div>
+                      )}
+                        {data.number_of_episodes && (
+                          <div>
+                            <div className="flex items-center">
+                              <svg className="text-gray-500 mr-4" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+                              <div>
+                                <p className="font-semibold text-gray-600">Total Episodes</p>
+                                <p className="font-medium">{data.number_of_episodes}</p>
+                              </div>
+                            </div>
+                            <div className="border-t border-gray-200 my-2" />
+                          </div>
+                        )}
+                      {data.seasons && (
+                        <div>
+                        <div className="flex items-center">
+                          <svg className="text-gray-500 mr-4" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+                          <div>
+                            <p className="font-semibold text-gray-600">Total Seasons</p>
+                            <p className="font-medium">{data.number_of_seasons}</p>
+                          </div>
+                        </div>
+                        <div className="border-t border-gray-200 my-2" />
+                      </div>
+                      )}
+                      {typeof data.vote_count === "number" && (
+                        <div className="flex items-center">
+                          <svg className="text-gray-500 mr-4" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.01 4.01 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 17.99 4 20 6.01 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                          <div>
+                            <p className="font-semibold text-gray-600">Votes</p>
+                            <p className="font-bold text-amber-400 text-lg">{data.vote_count.toLocaleString()}</p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </section>
+
+                  
+
+                  {Array.isArray(data.production_companies) && data.production_companies.length > 0 && (
+                    <section>
+                      <h2 className="text-2xl font-bold text-gray-900 mb-4 border-l-4 border-amber-400 pl-4">Production</h2>
+                      <div className="space-y-3">
+                        {data.production_companies.slice(0, 6).map((company: any) => (
+                          <div key={company.id} className="flex items-center p-3 bg-gray-100 rounded-lg ">
+                            <div className="w-10 h-10 bg-purple-100 rounded-md flex items-center justify-center mr-4">
+                              <svg width="20" height="20" viewBox="0 0 24 24" fill="#8B5CF6" aria-hidden="true"><path d="M4 6h16v12H4zM2 8h2v8H2zm18 0h2v8h-2z"/></svg>
+                            </div>
+                            <p className="font-semibold text-gray-800">{company.name}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
   );
