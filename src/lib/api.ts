@@ -21,9 +21,9 @@ export const tmdb = {
   discoverMovies: (params: string) => withApiKey(`${TMDB_BASE}/discover/movie?${params}`),
   discoverTv: (params: string) => withApiKey(`${TMDB_BASE}/discover/tv?${params}`),
   discoverMoviesWith: (params: Record<string, string | number>) =>
-    withApiKey(`${TMDB_BASE}/discover/movie?${new URLSearchParams(params as any).toString()}`),
+    withApiKey(`${TMDB_BASE}/discover/movie?${new URLSearchParams(params as Record<string, string>).toString()}`),
   discoverTvWith: (params: Record<string, string | number>) =>
-    withApiKey(`${TMDB_BASE}/discover/tv?${new URLSearchParams(params as any).toString()}`),
+    withApiKey(`${TMDB_BASE}/discover/tv?${new URLSearchParams(params as Record<string, string>).toString()}`),
   details: (type: Exclude<MediaType, "all">, id: string, append?: string) =>
     withApiKey(`${TMDB_BASE}/${type}/${id}${append ? `?append_to_response=${append}` : ""}`),
   credits: (type: Exclude<MediaType, "all">, id: string) =>

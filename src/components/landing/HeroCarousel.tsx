@@ -4,19 +4,11 @@ import { motion } from "framer-motion";
 import { poster } from "@/lib/api";
 import { useTransitionRouter } from "next-view-transitions";
 
-type Item = {
-  id: number;
-  title?: string;
-  name?: string;
-  poster_path?: string;
-  original_language?: string;
-  release_date?: string;
-  first_air_date?: string;
-};
+import { HeroItem, HeroPillEvent } from "@/lib/types";
 
 export default function HeroCarousel() {
-  const [items, setItems] = useState<Item[]>([]);
-  const [restItems, setRestItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<HeroItem[]>([]);
+  const [restItems, setRestItems] = useState<HeroItem[]>([]);
   const [loading, setLoading] = useState(false);
   const stepDeg = 36; // rotation per interaction
   const [stepOffset, setStepOffset] = useState(0); // number of steps rotated
@@ -49,7 +41,7 @@ export default function HeroCarousel() {
     try {
       const res = await fetch(`/api/tmdb?kind=${encodeURIComponent(kind)}`);
       const data = await res.json();
-      const list: Item[] = Array.isArray(data.results) ? data.results.slice(0, 10) : [];
+      const list: HeroItem[] = Array.isArray(data.results) ? data.results.slice(0, 10) : [];
       // add the rest of the items to another array
       const rest = Array.isArray(data.results) ? data.results.slice(10) : [];
       setRestItems(rest);
@@ -66,7 +58,10 @@ export default function HeroCarousel() {
   useEffect(() => {
     setMounted(true);
     load("popular");
-    const onPill = (e: any) => load(e.detail?.value || "popular");
+    const onPill = (e: Event) => {
+      const customEvent = e as HeroPillEvent;
+      load(customEvent.detail?.value || "popular");
+    };
     window.addEventListener("hero:pill", onPill);
     const onResize = () => setViewportWidth(window.innerWidth);
     window.addEventListener('resize', onResize);
@@ -146,7 +141,7 @@ export default function HeroCarousel() {
   const currentRotation = 18 + stepOffset * stepDeg; // keep existing base offset
 
   const showSkeleton = mounted && (loading || items.length === 0);
-  const renderItems: Item[] = showSkeleton
+  const renderItems: HeroItem[] = showSkeleton
     ? Array.from({ length: numSides }).map((_, i) => ({ id: i }))
     : items;
 

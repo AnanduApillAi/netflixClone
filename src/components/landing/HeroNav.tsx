@@ -9,7 +9,7 @@ export default function HeroNav() {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
   const router = useTransitionRouter();
-  let query = "";
+  const query = "";
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);

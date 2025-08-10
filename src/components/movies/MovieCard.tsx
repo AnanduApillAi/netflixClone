@@ -1,21 +1,15 @@
 "use client";
 import {Link} from "next-view-transitions";
+import Image from "next/image";
 import { poster } from "@/lib/api";
+import { MovieCardProps } from "@/lib/types";
 
-type Props = {
-  item: any;
-  href: string;
-  type: string;
-};
-
-export default function MovieCard({ item, href, type }: Props) {
+export default function MovieCard({ item, href, type }: MovieCardProps) {
   const img = poster(item?.poster_path, "w300");
-  const title = item?.title || item?.name || "";
+  const title = item && "title" in item ? item.title : item?.name || "";
   const overview = item?.overview || "No description available.";
-  const year =
-    item?.release_date || item?.first_air_date
-      ? new Date(item.release_date || item.first_air_date).getFullYear()
-      : null;
+  const date = item && "release_date" in item ? item.release_date : item && "first_air_date" in item ? item.first_air_date : undefined;
+  const year = date ? new Date(date).getFullYear() : null;
   const rating = typeof item?.vote_average === "number" ? Number(item.vote_average).toFixed(1) : null;
 
   return (
@@ -53,12 +47,12 @@ export default function MovieCard({ item, href, type }: Props) {
           {/* Front Side */}
           <div className="flip-card-front overflow-hidden relative bg-[#F8F9FA]">
             {img ? (
-              <img
+              <Image
                 alt={title}
                 className="w-full h-full object-cover"
                 src={img}
-                loading="lazy"
-                style={{ display: "block" }}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-[#F3F4F6] to-[#E5E7EB] flex items-center justify-center">

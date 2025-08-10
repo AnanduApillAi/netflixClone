@@ -2,11 +2,12 @@ import Image from "next/image";
 import {Link} from "next-view-transitions";
 import { tmdb, poster, backdrop } from "@/lib/api";
 import HeroNav from "@/components/landing/HeroNav";
+import { TMDBMovie } from "@/lib/types";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const res = await fetch(tmdb.details("movie", id), { next: { revalidate: 300 } }).catch(() => null as any);
-  const data = res?.ok ? await res.json() : null;
+  const res = await fetch(tmdb.details("movie", id), { next: { revalidate: 300 } }).catch(() => null);
+  const data: TMDBMovie | null = res?.ok ? await res.json() : null;
   const title = data?.title ? `${data.title} | Netflix Clone` : "Movie | Netflix Clone";
   return { title };
 }
@@ -15,9 +16,9 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
   const { id } = await params;
   const res = await fetch(tmdb.details("movie", id, "videos,credits"), {
     next: { revalidate: 300 },
-  }).catch(() => null as any);
-  const data = res?.ok ? await res.json() : null;
-  
+  }).catch(() => null);
+  const data: TMDBMovie | null = res?.ok ? await res.json() : null;
+
   if (!data) {
     return (
       <main className="min-h-screen bg-white">
@@ -43,10 +44,10 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
   const hours = runtime ? Math.floor(runtime / 60) : undefined;
   const minutes = runtime && typeof hours === "number" ? runtime % 60 : undefined;
 
-  const trailer = data.videos?.results?.find((v: any) => v.type === "Trailer" && v.site === "YouTube");
+  const trailer = data.videos?.results?.find((v) => v.type === "Trailer" && v.site === "YouTube");
   const mainCast = data.credits?.cast?.slice(0, 6) || [];
-  const director = data.credits?.crew?.find((c: any) => c.job === "Director");
-  const producers = data.credits?.crew?.filter((c: any) => c.job === "Producer").slice(0, 3) || [];
+  const director = data.credits?.crew?.find((c) => c.job === "Director");
+  const producers = data.credits?.crew?.filter((c) => c.job === "Producer").slice(0, 3) || [];
   const releaseYear = data.release_date ? new Date(data.release_date).getFullYear() : undefined;
   const voteAverage = typeof data.vote_average === "number" ? Number(data.vote_average).toFixed(1) : undefined;
 
@@ -82,15 +83,15 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
                 )}
               </p>
               <h1 className="text-5xl md:text-7xl font-bold mt-2 drop-shadow-[0_8px_24px_rgba(0,0,0,0.8)]">{data.title}</h1>
-              {Array.isArray(data.genres) && data.genres.length > 0 && (
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {data.genres.map((g: any) => (
-                    <span key={g.id} className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium border border-white/20 backdrop-blur-sm">
-                      {g.name}
-                    </span>
-                  ))}
-                </div>
-              )}
+                              {Array.isArray(data.genres) && data.genres.length > 0 && (
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {data.genres.map((g) => (
+                      <span key={g.id} className="bg-white/10 text-white px-4 py-1.5 rounded-full text-sm font-medium border border-white/20 backdrop-blur-sm">
+                        {g.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
               {trailer && (
                 <div className="mt-8">
                   <Link href={`/watch/movie/${id}`} className="inline-flex items-center justify-center bg-[#8B5CF6] hover:bg-[#8a5cf6c4]  text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-200">
@@ -119,7 +120,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
                     <section>
                       <h2 className="text-3xl font-bold text-gray-900 mb-6 border-l-4 border-[#8B5CF6] pl-4">Cast</h2>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                        {mainCast.map((actor: any) => (
+                        {mainCast.map((actor) => (
                           <div key={actor.id} className="text-center group">
                             <div className="relative w-32 h-32 mx-auto">
                               <div className="w-32 h-32">
@@ -162,7 +163,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
                             <svg className="text-gray-500 mr-4" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 7h16v2H4zm0 4h13v2H4zm0 4h10v2H4z"/></svg>
                             <div>
                               <p className="font-semibold text-gray-600">Producers</p>
-                              <p className="font-medium">{producers.map((p: any) => p.name).join(", ")}</p>
+                              <p className="font-medium">{producers.map((p) => p.name).join(", ")}</p>
                             </div>
                           </div>
                           <div className="border-t border-gray-200 my-2" />
@@ -196,7 +197,7 @@ export default async function MovieDetails({ params }: { params: Promise<{ id: s
                     <section>
                       <h2 className="text-2xl font-bold text-gray-900 mb-4 border-l-4 border-amber-400 pl-4">Production</h2>
                       <div className="space-y-3">
-                        {data.production_companies.slice(0, 6).map((company: any) => (
+                        {data.production_companies.slice(0, 6).map((company) => (
                           <div key={company.id} className="flex items-center p-3 bg-gray-100 rounded-lg ">
                             <div className="w-10 h-10 bg-purple-100 rounded-md flex items-center justify-center mr-4">
                               <svg width="20" height="20" viewBox="0 0 24 24" fill="#8B5CF6" aria-hidden="true"><path d="M4 6h16v12H4zM2 8h2v8H2zm18 0h2v8h-2z"/></svg>
