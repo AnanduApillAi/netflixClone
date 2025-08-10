@@ -21,13 +21,14 @@ export default function HeroCarousel() {
   const router = useTransitionRouter();
   const wheelLockRef = useRef(false);
   const touchRef = useRef<{ x: number; y: number; triggered: boolean } | null>(null);
+  
 
   // Responsive sizing based on viewport width
   const isSmall = viewportWidth < 640;
   const isXSmall = viewportWidth < 400;
   const isMedium = viewportWidth >= 640 && viewportWidth < 1024;
   // Slightly larger cards for <650 as requested
-  const cardWidth = isXSmall ? Math.min(160, viewportWidth - 40) : isSmall ? 200 : isMedium ? 220 : 260; // px width of each card, clamp for tiny screens
+  const cardWidth = isXSmall ? Math.min(160, viewportWidth - 40) : isSmall ? 200 : isMedium ? 220 : 220; // px width of each card, clamp for tiny screens
   const cardHeight = Math.round(cardWidth * 1.5); // maintain 2:3 ratio
   const numSides = 10; // number of sides in a decagon
   // Base radius per breakpoint, then clamp to viewport so axis stays centered on tiny screens
@@ -155,7 +156,6 @@ export default function HeroCarousel() {
       <div className="flex justify-center items-center relative w-full" style={{ minHeight: `${2 * radius}px` }}>
         <motion.div
           key={animCycle}
-          className={`relative ${viewportWidth < 350 ? 'top-[10rem]': viewportWidth < 400 ? 'top-[14rem]' : 'top-[12rem] sm:top-[12rem] lg:top-[12rem]'}`}
           style={{ width: `${2 * radius}px`, height: `${2 * radius}px`, transformOrigin: `${radius}px ${radius}px` }}
           initial={{ rotate: (loading || items.length === 0) ? currentRotation : currentRotation - 180 }}
           animate={{ rotate: currentRotation }}
