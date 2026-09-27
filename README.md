@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Netflix Clone
 
-## Getting Started
+A Netflix-style catalogue for browsing movies and TV shows, built with the Next.js App Router and powered by [TMDB](https://www.themoviedb.org/) data.
 
-First, run the development server:
+**Live demo:** https://netflix-clone-orpin-theta-64.vercel.app
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- **Animated landing page**: hero carousel of trending titles with Framer Motion transitions
+- **Movies and TV catalogues**: genre filtering driven by URL search params, so filtered views are shareable
+- **Title detail pages**: overview, rating, genres, cast and crew for every movie and show
+- **Search**: multi-search across movies and TV
+- **Trailers**: plays the official YouTube trailer when TMDB has one
+- **Page transitions**: smooth navigation using the View Transitions API (`next-view-transitions`)
+
+## How it's built
+
+- **Server Components first.** Catalogue, detail and search pages fetch TMDB data on the server, so the API key never reaches the browser. The one client-side call goes through a small proxy route (`/api/tmdb`).
+- **Cached fetches.** TMDB requests use Next.js `revalidate` caching: lists refresh every minute, details every 5 minutes, and genre lists hourly. This keeps pages fast and stays well within TMDB's rate limits.
+- **Route-level loading and error states.** Each catalogue section has its own `loading.tsx` and `error.tsx`, so a failed TMDB call degrades one section instead of breaking the whole app.
+- **Typed API layer.** `src/lib/api.ts` builds every TMDB URL in one place, and `src/lib/types.ts` types the responses.
+
+## Tech stack
+
+Next.js 15 (App Router) · React · TypeScript · Tailwind CSS v4 · Framer Motion · TMDB API
+
+## Running locally
+
+1. Get a free API key from [TMDB](https://www.themoviedb.org/settings/api).
+2. Create `.env.local` in the project root:
+
+   ```bash
+   TMDB_API_KEY=your_tmdb_api_key
+   ```
+
+3. Install and start:
+
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+Open http://localhost:3000.
+
+## Project structure
+
+```
+src/
+├── app/
+│   ├── (catalog)/          # movies, tvshows, search, detail and watch routes
+│   ├── api/tmdb/           # server-side TMDB proxy
+│   └── page.tsx            # landing page
+├── components/
+│   ├── landing/            # hero carousel, nav, pills
+│   └── movies/             # movie card and grid
+└── lib/                    # TMDB client and types
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Disclaimer
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This is a learning project and is not affiliated with Netflix. Movie and TV data comes from TMDB. This product uses the TMDB API but is not endorsed or certified by TMDB.
